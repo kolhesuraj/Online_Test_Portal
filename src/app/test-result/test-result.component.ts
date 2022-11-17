@@ -34,6 +34,7 @@ export class TestResultComponent implements OnInit {
   }
 
   checkAnswer() {
+    console.log("correct Index+    + your answers");
     this.test.forEach((element: any, i) => {
       if (element.type) {
         if (element.correctOptionIndex.lenght == this.result[i].lenght) {
