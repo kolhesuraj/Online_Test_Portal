@@ -24,16 +24,16 @@ export class TestQuestionComponent implements OnInit {
   ngOnInit(): void {
     this.testId = this.roter.snapshot.paramMap.get('id');
     this.getquestions();
-    this.setArray();
-    let answerLocal = JSON.parse(localStorage.getItem(this.testId)!);
-    let optionsLocal = JSON.parse(localStorage.getItem(this.testId + 'text')!);
 
-    if (answerLocal == null) {
-      this.setArray();
-    } else {
+    if (localStorage.getItem(this.testId)) {
+      let answerLocal = JSON.parse(localStorage.getItem(this.testId)!);
+      let optionsLocal = JSON.parse(
+        localStorage.getItem(this.testId + 'text')!
+      );
       this.answer = answerLocal;
       this.options = optionsLocal;
-    }
+    } else this.setArray();
+
   }
 
   getquestions() {
@@ -45,6 +45,7 @@ export class TestQuestionComponent implements OnInit {
       }
     });
   }
+
   setArray() {
     this.questions.forEach((element, i) => {
       if (element.type) {
@@ -54,6 +55,7 @@ export class TestQuestionComponent implements OnInit {
     });
     // console.log(this.answer)
   }
+  
   record(i: any, option: any) {
     if (this.questions[this.questionNow].type) {
       this.checkans(i, option);
@@ -70,15 +72,14 @@ export class TestQuestionComponent implements OnInit {
   checkans(i: any, option: any) {
     if (this.answer[this.questionNow].includes(i)) {
       let result: any[] = this.answer[this.questionNow].filter((element) => {
-        return element != i;        
+        return element != i;
       });
       let text: any[] = this.options[this.questionNow].filter((element) => {
         return element != option;
       });
-      
+
       this.options[this.questionNow] = text;
       this.answer[this.questionNow] = result;
-      
     } else {
       this.answer[this.questionNow].push(i);
       this.options[this.questionNow].push(option);
@@ -88,7 +89,7 @@ export class TestQuestionComponent implements OnInit {
     if (this.answer.length == this.questions.length) {
       this.router.navigate([`./../result/${this.testId}`]);
     } else {
-      alert("please attemp all questions");
+      alert('please attemp all questions');
     }
   }
 }
